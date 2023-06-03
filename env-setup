@@ -1,0 +1,9 @@
+#!/bin/bash
+
+env_setup_path=$(dirname $BASH_SOURCE)
+environments=$(cat "$env_setup_path"/.env)
+
+for environment in $environments; do
+  export "$environment"
+  export "TF_VAR_$environment"
+done

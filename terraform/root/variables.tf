@@ -1,6 +1,10 @@
+variable "aws_region" {
+  type = string
+}
+
 variable "cidr_block" {
   type    = string
-  default = "192.168.0.0/22"
+  default = "192.168.0.0/24"
 }
 
 variable "tag_name" {
@@ -49,4 +53,19 @@ variable "parameter_group_name" {
 variable "skip_final_snapshot" {
   type    = bool
   default = true
+}
+
+variable "cidr_block_sub_pub_us_west_1" {
+  type    = string
+  default = "192.168.0.0/25"
+}
+
+variable "cidr_block_sub_pvt_us_west_1" {
+  type    = string
+  default = "192.168.0.128/25"
+}
+
+
+variable "aws_availability_zone" {
+  type = string
 }
