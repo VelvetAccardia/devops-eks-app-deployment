@@ -40,3 +40,7 @@ module "aws_vpc" {
 #   parameter_group_name = var.parameter_group_name
 #   skip_final_snapshot  = var.skip_final_snapshot
 # }
+
+module "aws_eks" {
+  source = "../modules/eks"
+}
