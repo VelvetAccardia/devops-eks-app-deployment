@@ -20,14 +20,26 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file app/spring-helloworld/pom.xml
 
-    - name: Build Docker image
-      run: docker build . -f app/spring-helloworld/Dockerfile --tag my-spring-app:latest
+    - name: Log in to Docker Hub
+      uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Push Docker image
-      run: |
-        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-        docker tag my-spring-app:latest ${{ secrets.DOCKER_USERNAME }}/my-spring-app:latest
-        docker push ${{ secrets.DOCKER_USERNAME }}/my-spring-app:latest
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+      with:
+        images: ${{env.DOCKER_HUB_NAMESPACE}}/${{.env.DOCKER_HUB_REPOSITORY}}
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+      with:
+        context: .
+        file: ./app/spring-helloworld/Dockerfile
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
 
     - name: Deploy Helm to EKS
       uses: bitovi/github-actions-deploy-eks-helm@v1.2.4
