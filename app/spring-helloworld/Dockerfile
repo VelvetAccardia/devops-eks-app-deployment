@@ -3,9 +3,9 @@ FROM maven:3.8.3-openjdk-17-slim AS build
 
 WORKDIR /app
 
-COPY pom.xml .
+COPY app/spring-helloworld/pom.xml .
 
-COPY src ./src
+COPY app/spring-helloworld/src ./src
 
 RUN mvn package -DskipTests
 
