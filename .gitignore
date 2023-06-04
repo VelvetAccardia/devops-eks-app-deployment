@@ -34,3 +34,10 @@ override.tf.json
 terraform.rc
 
 .env
+.vscode
+
+# Default ignored files
+/shelf/
+/workspace.xml
+
+.idea
