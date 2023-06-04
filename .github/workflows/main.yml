@@ -21,7 +21,7 @@ jobs:
       run: mvn -B package --file app/spring-helloworld/pom.xml
 
     - name: Build Docker image
-      run: docker build . --file app/spring-helloworld/Dockerfile --tag my-spring-app:latest
+      run: docker build . -f app/spring-helloworld/Dockerfile --tag my-spring-app:latest
 
     - name: Push Docker image
       run: |
