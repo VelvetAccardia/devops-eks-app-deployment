@@ -18,9 +18,42 @@ data "aws_iam_policy_document" "eks_policy" {
   statement {
     effect = "Allow"
     actions = [
+      "eks:AccessKubernetesApi",
+      "eks:AssociateEncryptionConfig",
+      "eks:AssociateIdentityProviderConfig",
+      "eks:CreateAddon",
+      "eks:CreateCluster",
+      "eks:CreateFargateProfile",
+      "eks:CreateNodegroup",
+      "eks:DeleteAddon",
+      "eks:DeleteCluster",
+      "eks:DeleteFargateProfile",
+      "eks:DeleteNodegroup",
+      "eks:DeregisterCluster",
+      "eks:DescribeAddon",
+      "eks:DescribeAddonConfiguration",
+      "eks:DescribeAddonVersions",
       "eks:DescribeCluster",
+      "eks:DescribeFargateProfile",
+      "eks:DescribeIdentityProviderConfig",
+      "eks:DescribeNodegroup",
+      "eks:DescribeUpdate",
+      "eks:DisassociateIdentityProviderConfig",
+      "eks:ListAddons",
       "eks:ListClusters",
-      "eks:UpdateKubeconfig"
+      "eks:ListFargateProfiles",
+      "eks:ListIdentityProviderConfigs",
+      "eks:ListNodegroups",
+      "eks:ListTagsForResource",
+      "eks:ListUpdates",
+      "eks:RegisterCluster",
+      "eks:TagResource",
+      "eks:UntagResource",
+      "eks:UpdateAddon",
+      "eks:UpdateClusterConfig",
+      "eks:UpdateClusterVersion",
+      "eks:UpdateNodegroupConfig",
+      "eks:UpdateNodegroupVersion"
     ]
     resources = ["*"]
   }
