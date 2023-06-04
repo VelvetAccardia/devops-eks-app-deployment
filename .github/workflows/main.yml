@@ -49,8 +49,5 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-region: ${{ env.AWS_REGION }}
         cluster-name: ${{ env.CLUSTER_NAME }}
-        cluster-role-arn: ${{ secrets.AWS_ROLE_ARN }}
-        namespace: core
-        config-files: helm/helloworld-spring/values.yaml
         name: ${{ env.HELM_RELEASE_NAME}}
         chart-path: ${{ env.HELM_CHART_PATH }}
