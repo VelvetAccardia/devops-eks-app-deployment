@@ -42,12 +42,12 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
-    # - name: Deploy Helm to EKS
-    #   uses: bitovi/github-actions-deploy-eks-helm@v1.2.4
-    #   with:
-    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #     aws-region: ${{ env.AWS_REGION }}
-    #     cluster-name: ${{ env.CLUSTER_NAME }}
-    #     name: ${{ env.HELM_RELEASE_NAME}}
-    #     chart-path: ${{ env.HELM_CHART_PATH }}
+    - name: Deploy Helm to EKS
+      uses: bitovi/github-actions-deploy-eks-helm@v1.2.4
+      with:
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-region: ${{ env.AWS_REGION }}
+        cluster-name: ${{ env.CLUSTER_NAME }}
+        name: ${{ env.HELM_RELEASE_NAME}}
+        chart-path: ${{ env.HELM_CHART_PATH }}
