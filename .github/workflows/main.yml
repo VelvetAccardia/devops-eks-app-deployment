@@ -32,7 +32,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: ${ vars.DOCKER_HUB_NAMESPACE}/${ vars.DOCKER_HUB_REPOSITORY }
+          images: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_REPOSITORY }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
@@ -46,15 +46,15 @@ jobs:
       - name: AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         env:
-          AWS_REGION: ${{ vars.AWS_REGION }}
+          AWS_REGION: ${{ env.AWS_REGION }}
         with:
-          role-to-assume: arn:aws:iam::${{ env.AWS_ACCOUNT_ID }}role/github-actions
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-actions
           role-session-name: ci-run-${{ github.run_id }}
-          aws-region: ${{ vars.AWS_REGION }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: kubeconfig
         run: |
-          aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }} --region ${{ vars.AWS_REGION }}  --kubeconfig ./kubeconfig
+          aws eks update-kubeconfig --name ${{ env.CLUSTER_NAME }} --region ${{ env.AWS_REGION }}  --kubeconfig ./kubeconfig
           echo 'KUBE_CONFIG_DATA<<EOF' >> $GITHUB_ENV
           echo $(cat ./kubeconfig | base64) >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
@@ -62,7 +62,7 @@ jobs:
       - name: helm deploy
         uses: koslib/helm-eks-action@master
         env:
-          KUBE_CONFIG_DATA: ${{ vars.KUBE_CONFIG_DATA }}
+          KUBE_CONFIG_DATA: ${{ env.KUBE_CONFIG_DATA }}
         with:
-          plugins: "https://github.com/jkroepke/helm-secrets" # optional
-          command: helm secrets upgrade ${ vars.HELM_RELEASE_NAME } --install --wait ${ vars.HELM_CHART_PATH } -f ${ vars.HELM_CHART_PATH }/values.yaml
+          plugins: "https://github.com/jkroepke/helm-secrets" # opcional
+          command: helm secrets upgrade ${{ env.HELM_RELEASE_NAME }} --install --wait ${{ env.HELM_CHART_PATH }} -f ${{ env.HELM_CHART_PATH }}/values.yaml
