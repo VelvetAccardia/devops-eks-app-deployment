@@ -66,6 +66,11 @@ resource "aws_route_table" "rt_pub" {
 resource "aws_route_table" "rt_pvt" {
   vpc_id = aws_vpc.main.id
 
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_nat_gateway.nat.id
+  }
+
   tags = {
     Name = "rt_pvt"
   }
@@ -97,4 +102,104 @@ resource "aws_internet_gateway" "ig_pub" {
   tags = {
     Name = "ig_pub"
   }
+}
+
+resource "aws_eip" "nat" {
+  vpc = true
+
+  tags = {
+    Name = "nat"
+  }
+}
+
+resource "aws_nat_gateway" "nat" {
+  allocation_id = aws_eip.nat.id
+  subnet_id     = aws_subnet.sub_pub_1_us_west_1.id
+
+  tags = {
+    Name = "nat"
+  }
+
+  depends_on = [aws_internet_gateway.ig_pub]
+}
+resource "aws_security_group" "TF_SG" {
+  name   = "Security Group Terraform"
+  vpc_id = aws_vpc.main.id
+
+  ingress {
+    description = "Traffic from VPC"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "Security Group Terraform"
+  }
+}
+resource "aws_lb" "load_balancer" {
+  name               = "loadbalancer"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.TF_SG.id]
+  subnets            = [aws_subnet.sub_pub_1_us_west_1.id, aws_subnet.sub_pub_2_us_west_1.id]
+
+  enable_deletion_protection = true
+
+  tags = {
+    Environment = "production"
+  }
+}
+
+resource "aws_lb_target_group" "target_group" {
+  name     = "lb-target-group"
+  port     = 8080
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.main.id
+
+
+}
+
+
+resource "aws_lb_listener" "listener" {
+  load_balancer_arn = aws_lb.load_balancer.arn
+  port              = 80
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.target_group.arn
+  }
+}
+
+resource "aws_route53_zone" "zone" {
+  name = var.domain
+}
+
+resource "aws_route53_record" "www" {
+  zone_id = aws_route53_zone.zone.id
+  name    = var.domain
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.load_balancer.dns_name
+    zone_id                = aws_lb.load_balancer.zone_id
+    evaluate_target_health = false
+  }
+}
+
+resource "aws_route53_record" "cname" {
+  zone_id = aws_route53_zone.zone.id
+  name    = var.cname
+  type    = "CNAME"
+  records = [aws_lb.load_balancer.dns_name]
+  ttl     = "300"
 }

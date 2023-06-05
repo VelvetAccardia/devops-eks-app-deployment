@@ -26,5 +26,5 @@ service:
   #    hosts:
   #      - chart-example.local
 
-container:
+containers:
   name: hello-world

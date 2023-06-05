@@ -85,7 +85,7 @@ variable "aws_availability_zone_2" {
 
 variable "endpoint_private_access" {
   type    = bool
-  default = false
+  default = true
 }
 
 variable "endpoint_public_access" {
@@ -110,4 +110,12 @@ variable "pvt_subnet_id_1" {
 variable "pvt_subnet_id_2" {
   type    = string
   default = "subnet-01319ddc41733de32"
+}
+
+variable "domain" {
+  type = string
+}
+
+variable "cname" {
+  type = string
 }

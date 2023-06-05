@@ -6,7 +6,6 @@ metadata:
     {{- include "helloworld-spring.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "helloworld-spring.selectorLabels" . | nindent 6 }}
@@ -20,4 +19,4 @@ spec:
           image: {{ .Values.container.name | quote }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-              containerPort: {{ .Values.service.port }}
+            - containerPort: {{ .Values.service.port }}

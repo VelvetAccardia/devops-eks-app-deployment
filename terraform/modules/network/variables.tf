@@ -33,3 +33,11 @@ variable "cidr_block_sub_pvt_2_us_west_1" {
   type = string
 }
 
+variable "domain" {
+  type = string
+}
+
+variable "cname" {
+  type = string
+}
+
