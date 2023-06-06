@@ -1,16 +1,14 @@
+---
 replicaCount: 1
-
 image:
   repository: velvetaccardia/spring-helloworld
   pullPolicy: IfNotPresent
   tag: ""
-  
 service:
   type: NodePort
   port: 8080
   name: hello-world
   targetport: 8080
-
   enabled: false
   className: ""
   annotations: {}
@@ -20,6 +18,5 @@ service:
         - path: /
           pathType: ImplementationSpecific
   tls: []
-
 containers:
   name: hello-world
