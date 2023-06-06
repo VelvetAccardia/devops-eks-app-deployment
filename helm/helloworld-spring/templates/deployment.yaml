@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "helloworld-spring.fullname" . }}
+  name: spring-helloworld
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "helloworld-spring.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/name: spring-helloworld
   template:
     metadata:
       labels:
-        {{- include "helloworld-spring.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/name: spring-helloworld
     spec:
       containers:
       - name: {{ .Values.containers.name }}
-        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        image: {{ .Values.image.repository }}:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: {{ .Values.service.port }}
