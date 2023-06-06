@@ -13,9 +13,9 @@ jobs:
     name: 'Terraform'
     runs-on: ubuntu-latest
     environment: prod
-
     defaults:
       run:
+        working-directory: terraform/root
         shell: bash
 
     steps:
@@ -35,60 +35,76 @@ jobs:
         echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
         sudo apt update && sudo apt install terraform
 
-    - name: Install AWS IAM Authenticator
-      run: curl -o aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/aws-iam-authenticator && chmod +x ./aws-iam-authenticator && sudo mv aws-iam-authenticator /usr/local/bin/
-
     - name: Set up Kubeconfig
       run: |
         mkdir -p ~/.kube
         echo "${{ secrets.KUBECONFIG }}" > ~/.kube/eks-kubeconfig.yaml
         export KUBECONFIG=~/.kube/eks-kubeconfig.yaml
 
+    - name: Terraform Format
+      run: terraform fmt -check
+
     - name: Terraform Init
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      run: |
-        cd terraform/root
-        terraform init -input=false \
-            -var="aws_region=${{ vars.AWS_REGION }}" \
-            -var="aws_availability_zone_1=${{ vars.AWS_AVAILABILITY_ZONE_1 }}" \
-            -var="aws_availability_zone_2=${{ vars.AWS_AVAILABILITY_ZONE_2 }}" \
-            -var="cluster=${{ vars.CLUSTER }}" \
-            -var="domain=${{ vars.DOMAIN }}" \
-            -var="cname=${{ vars.CNAME }}" \
-            -var="db_username=${{ vars.DB_USERNAME }}" \
-            -var="db_password=${{ vars.DB_PASSWORD }}"
+      run: terraform init -input=false 
 
     - name: Terraform Plan
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
-        cd terraform/root
         terraform plan -input=false \
-            -var="aws_region=${{ vars.AWS_REGION }}" \
-            -var="aws_availability_zone_1=${{ vars.AWS_AVAILABILITY_ZONE_1 }}" \
-            -var="aws_availability_zone_2=${{ vars.AWS_AVAILABILITY_ZONE_2 }}" \
-            -var="cluster=${{ vars.CLUSTER }}" \
-            -var="domain=${{ vars.DOMAIN }}" \
-            -var="cname=${{ vars.CNAME }}" \
-            -var="db_username=${{ vars.DB_USERNAME }}" \
-            -var="db_password=${{ vars.DB_PASSWORD }}"
+        -var="aws_region=${{ secrets.AWS_REGION }}" \
+        -var="aws_availability_zone_1=${{ secrets.AWS_AVAILABILITY_ZONE_1 }}" \
+        -var="aws_availability_zone_2=${{ secrets.AWS_AVAILABILITY_ZONE_2 }}" \
+        -var="cluster=${{ secrets.CLUSTER }}" \
+        -var="domain=${{ secrets.DOMAIN }}" \
+        -var="cname=${{ secrets.CNAME }}" \
+        -var="db_username=${{ secrets.DB_USERNAME }}" \
+        -var="db_password=${{ secrets.DB_PASSWORD }}" \
+        -var="kubeconfig=${{ secrets.KUBECONFIG }}" 
+
+    - uses: actions/github-script@0.9.0
+      if: github.event_name == 'pull_request'
+      env:
+        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+          #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+          #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+          <details><summary>Show Plan</summary>
+
+          \`\`\`${process.env.PLAN}\`\`\`
+
+          </details>
+
+          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          })
 
     - name: Terraform Apply
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
-        cd terraform/root
         terraform apply -auto-approve -input=false \
-            -var="aws_region=${{ vars.AWS_REGION }}" \
-            -var="aws_availability_zone_1=${{ vars.AWS_AVAILABILITY_ZONE_1 }}" \
-            -var="aws_availability_zone_2=${{ vars.AWS_AVAILABILITY_ZONE_2 }}" \
-            -var="cluster=${{ vars.CLUSTER }}" \
-            -var="domain=${{ vars.DOMAIN }}" \
-            -var="cname=${{ vars.CNAME }}" \
-            -var="db_username=${{ vars.DB_USERNAME }}" \
-            -var="db_password=${{ vars.DB_PASSWORD }}" \
-            -var="kubeconfig=${{ vars.KUBECONFIG }}"
+        -var="aws_region=${{ secrets.AWS_REGION }}" \
+        -var="aws_availability_zone_1=${{ secrets.AWS_AVAILABILITY_ZONE_1 }}" \
+        -var="aws_availability_zone_2=${{ secrets.AWS_AVAILABILITY_ZONE_2 }}" \
+        -var="cluster=${{ secrets.CLUSTER }}" \
+        -var="domain=${{ secrets.DOMAIN }}" \
+        -var="cname=${{ secrets.CNAME }}" \
+        -var="db_username=${{ secrets.DB_USERNAME }}" \
+        -var="db_password=${{ secrets.DB_PASSWORD }}" \
+        -var="kubeconfig=${{ secrets.KUBECONFIG }}"
