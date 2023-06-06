@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_REPOSITORY }}
+  repository: velvetaccardia/spring-helloworld
   pullPolicy: IfNotPresent
   tag: ""
   
@@ -24,5 +24,5 @@ service:
   tls: []
 
 containers:
-  - name: hello-world
-    image: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_REPOSITORY }}
+    name: hello-world
+    image: velvetaccardia/spring-helloworld
