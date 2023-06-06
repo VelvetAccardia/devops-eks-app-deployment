@@ -57,7 +57,7 @@ jobs:
           cat ./kubeconfig | base64 >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
 
-      - name: Helm Chart Deployment
+      # - name: Helm Chart Deployment
         uses: koslib/helm-eks-action@master
         with:
           kubeconfig: ${{ env.KUBE_CONFIG_DATA }}
