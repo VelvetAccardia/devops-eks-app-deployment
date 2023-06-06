@@ -58,7 +58,7 @@ jobs:
       #     echo 'EOF' >> $GITHUB_ENV
 
       # - name: Helm Chart Deployment
-        uses: koslib/helm-eks-action@master
-        with:
-          kubeconfig: ${{ env.KUBE_CONFIG_DATA }}
-          command: helm upgrade --install --wait ${{ vars.HELM_RELEASE_NAME }} ${{ vars.HELM_CHART_PATH }} -f ${{ vars.HELM_CHART_PATH }}/values.yaml
+        # uses: koslib/helm-eks-action@master
+        # with:
+        #   kubeconfig: ${{ env.KUBE_CONFIG_DATA }}
+        #   command: helm upgrade --install --wait ${{ vars.HELM_RELEASE_NAME }} ${{ vars.HELM_CHART_PATH }} -f ${{ vars.HELM_CHART_PATH }}/values.yaml
