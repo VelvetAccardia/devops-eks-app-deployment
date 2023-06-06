@@ -43,7 +43,7 @@ jobs:
           tags: ${{ vars.DOCKER_HUB_IMAGE }}:latest
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: AWS Credentials
+      - name: Get AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
