@@ -1,10 +1,10 @@
 replicaCount: 1
 
 image:
-  repository: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_REPOSITORY }}}
+  repository: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_REPOSITORY }}
   pullPolicy: IfNotPresent
   tag: ""
-
+  
 service:
   type: NodePort
   port: 8080
@@ -27,4 +27,5 @@ service:
   #      - chart-example.local
 
 containers:
-  name: hello-world
+  - name: hello-world
+    image: ${{ env.DOCKER_HUB_NAMESPACE }}/${{ env.DOCKER_HUB_REPOSITORY }}

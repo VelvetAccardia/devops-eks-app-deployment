@@ -40,7 +40,7 @@ jobs:
           context: .
           file: ./app/spring-helloworld/Dockerfile
           push: true
-          tags: ${{ vars.DOCKER_HUB_IMAGE }}:${{ github.sha }}
+          tags: ${{ vars.DOCKER_HUB_IMAGE }}:latest
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: AWS Credentials
