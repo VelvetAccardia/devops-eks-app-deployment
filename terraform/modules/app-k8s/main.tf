@@ -8,14 +8,14 @@ resource "kubernetes_deployment" "hello_world_deployment" {
 
     selector {
       match_labels = {
-        "app.kubernetes.io/name" = "spring-helloworld"
+        "app.kubernetes.io/name" = "spring-hello-world"
       }
     }
 
     template {
       metadata {
         labels = {
-          "app.kubernetes.io/name" = "spring-helloworld"
+          "app.kubernetes.io/name" = "spring-hello-world"
         }
       }
 
