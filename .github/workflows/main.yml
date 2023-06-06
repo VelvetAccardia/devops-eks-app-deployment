@@ -38,7 +38,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./app/spring-helloworld
-          file: ./Dockerfile
+          file: ./app/spring-helloworld/Dockerfile
           push: true
           tags: ${{ vars.DOCKER_HUB_IMAGE }}:latest
           labels: ${{ steps.meta.outputs.labels }}
