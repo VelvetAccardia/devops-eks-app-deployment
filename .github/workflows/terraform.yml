@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: prod
 
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
         shell: bash
@@ -51,7 +50,15 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         cd terraform/root
-        terraform init -input=false -var-file=terraform.tfvars
+        terraform init -input=false \
+            -var="aws_region=${{ vars.AWS_REGION }}" \
+            -var="aws_availability_zone_1=${{ vars.AWS_AVAILABILITY_ZONE_1 }}" \
+            -var="aws_availability_zone_2=${{ vars.AWS_AVAILABILITY_ZONE_2 }}" \
+            -var="cluster=${{ vars.CLUSTER }}" \
+            -var="domain=${{ vars.DOMAIN }}" \
+            -var="cname=${{ vars.CNAME }}" \
+            -var="db_username=${{ vars.DB_USERNAME }}" \
+            -var="db_password=${{ vars.DB_PASSWORD }}"
 
     - name: Terraform Plan
       env:
@@ -59,7 +66,15 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         cd terraform/root
-        terraform plan -input=false -var-file=terraform.tfvars
+        terraform plan -input=false \
+            -var="aws_region=${{ vars.AWS_REGION }}" \
+            -var="aws_availability_zone_1=${{ vars.AWS_AVAILABILITY_ZONE_1 }}" \
+            -var="aws_availability_zone_2=${{ vars.AWS_AVAILABILITY_ZONE_2 }}" \
+            -var="cluster=${{ vars.CLUSTER }}" \
+            -var="domain=${{ vars.DOMAIN }}" \
+            -var="cname=${{ vars.CNAME }}" \
+            -var="db_username=${{ vars.DB_USERNAME }}" \
+            -var="db_password=${{ vars.DB_PASSWORD }}"
 
     - name: Terraform Apply
       env:
@@ -67,4 +82,12 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
         cd terraform/root
-        terraform apply -auto-approve -input=false -var-file=terraform.tfvars
+        terraform apply -auto-approve -input=false \
+            -var="aws_region=${{ vars.AWS_REGION }}" \
+            -var="aws_availability_zone_1=${{ vars.AWS_AVAILABILITY_ZONE_1 }}" \
+            -var="aws_availability_zone_2=${{ vars.AWS_AVAILABILITY_ZONE_2 }}" \
+            -var="cluster=${{ vars.CLUSTER }}" \
+            -var="domain=${{ vars.DOMAIN }}" \
+            -var="cname=${{ vars.CNAME }}" \
+            -var="db_username=${{ vars.DB_USERNAME }}" \
+            -var="db_password=${{ vars.DB_PASSWORD }}"
