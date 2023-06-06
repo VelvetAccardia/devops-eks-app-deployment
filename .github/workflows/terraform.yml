@@ -1,4 +1,4 @@
-name: 'Terraform'
+name: 'Terraform CI/CD Pipeline'
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  terraform:
+  terraform-provision:
     name: 'Terraform'
     runs-on: ubuntu-latest
     environment: prod
@@ -41,6 +41,7 @@ jobs:
 
     - name: Set up Kubeconfig
       run: |
+        mkdir -p ~/.kube
         echo "${{ secrets.KUBECONFIG }}" > ~/.kube/eks-kubeconfig.yaml
         export KUBECONFIG=~/.kube/eks-kubeconfig.yaml
 
