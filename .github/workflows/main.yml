@@ -50,14 +50,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ vars.AWS_REGION }}
 
-      - name: kubeconfig
+      - name: Update Kubeconfig
         run: |
           aws eks update-kubeconfig --name ${{ vars.CLUSTER_NAME }} --region ${{ vars.AWS_REGION }} --kubeconfig ./kubeconfig
           echo 'KUBE_CONFIG_DATA<<EOF' >> $GITHUB_ENV
           cat ./kubeconfig | base64 >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
 
-      - name: helm deploy
+      - name: Helm Chart Deployment
         uses: koslib/helm-eks-action@master
         with:
           kubeconfig: ${{ env.KUBE_CONFIG_DATA }}
