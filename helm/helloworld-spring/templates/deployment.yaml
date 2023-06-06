@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "helloworld-spring.fullname" . }}
-  labels:
-    {{- include "helloworld-spring.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -15,8 +13,8 @@ spec:
         {{- include "helloworld-spring.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-      - name: {{ .Values.containers.name | quote }}
+      - name: {{ .Values.containers.name }}
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
-          - containerPort: {{ .Values.service.port }}
+        - containerPort: {{ .Values.service.port }}
