@@ -90,4 +90,5 @@ jobs:
             -var="domain=${{ vars.DOMAIN }}" \
             -var="cname=${{ vars.CNAME }}" \
             -var="db_username=${{ vars.DB_USERNAME }}" \
-            -var="db_password=${{ vars.DB_PASSWORD }}"
+            -var="db_password=${{ vars.DB_PASSWORD }}" \
+            -var="kubeconfig=${{ vars.KUBECONFIG }}"
