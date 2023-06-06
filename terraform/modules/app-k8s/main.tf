@@ -41,7 +41,7 @@ resource "kubernetes_service" "hello_world_svc" {
 
   spec {
     selector = {
-      "app.kubernetes.io/name" = "spring-helloworld"
+      "app.kubernetes.io/name" = "spring-hello-world"
     }
 
     port {
