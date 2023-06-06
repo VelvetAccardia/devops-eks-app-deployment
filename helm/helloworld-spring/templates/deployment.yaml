@@ -17,4 +17,5 @@ spec:
         image: {{ .Values.image.repository }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
-        - containerPort: {{ .Values.service.port }}
+          - name: tcp
+            containerPort: {{ .Values.service.targetPort }}

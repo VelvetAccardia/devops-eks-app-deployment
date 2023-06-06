@@ -9,9 +9,9 @@ serviceAccount:
   name: ""
 
 service:
-  type: NodePort
-  port: 80
   name: hello-world
+  type: LoadBalancer
+  port: 80
   targetPort: 8080
   enabled: false
 containers:
