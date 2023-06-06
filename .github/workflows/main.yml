@@ -37,8 +37,8 @@ jobs:
       - name: Build and Push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: .
-          file: ./app/spring-helloworld/Dockerfile
+          context: ./app/spring--helloworld
+          file: ./Dockerfile
           push: true
           tags: ${{ vars.DOCKER_HUB_IMAGE }}:latest
           labels: ${{ steps.meta.outputs.labels }}
