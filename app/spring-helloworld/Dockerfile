@@ -1,17 +1,8 @@
-# Build
-FROM maven:3.8.3-openjdk-17-slim AS build
+# Use a OpenJDK image
+FROM openjdk:17
 
-WORKDIR /app
+WORKDIR /usr/src/myapp
 
-COPY app/spring-helloworld/pom.xml .
+COPY ./app/spring-helloworld/target/fullstackbook-springboot-eks-0.0.1-SNAPSHOT.jar /usr/src/myapp
 
-COPY app/spring-helloworld/src ./src
-
-RUN mvn package -DskipTests
-
-# Runtime
-FROM openjdk:17-jdk-alpine
-
-COPY --from=build /app/target/*.jar app.jar
-
-ENTRYPOINT ["java","-jar","/app.jar"]
+CMD ["java", "-jar", "/usr/src/myapp/fullstackbook-springboot-eks-0.0.1-SNAPSHOT.jar"]

@@ -1,13 +1,13 @@
-package com.velvetaccardia.springhelloworld;
+package com.example.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpringHelloworldApplication {
+public class DemoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringHelloworldApplication.class, args);
+		SpringApplication.run(DemoApplication.class, args);
 	}
 
 }
