@@ -37,7 +37,7 @@ jobs:
         sudo apt update && sudo apt install terraform
 
     - name: Create secret tfvars file
-      run: echo "${{ secrets.MY_TFVARS }}" > terraform/root/terraform.tfvars
+      run: echo "${{ secrets.TF_VARIABLES }}" > terraform/root/terraform.tfvars
 
     - name: Set up Kubeconfig
       run: |
