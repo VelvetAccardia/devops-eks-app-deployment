@@ -15,6 +15,7 @@ on:
 
 jobs:
   terraform:
+    environment: prod
     name: 'Terraform'
     runs-on: ubuntu-latest
 
