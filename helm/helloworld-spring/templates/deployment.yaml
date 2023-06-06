@@ -15,7 +15,7 @@ spec:
         {{- include "helloworld-spring.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-        - name: {{ .Values.containers.name | quote }}
+          name: {{ .Values.containers.name | quote }}
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
