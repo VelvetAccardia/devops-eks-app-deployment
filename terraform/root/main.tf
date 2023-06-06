@@ -20,7 +20,9 @@ provider "aws" {
   region = var.aws_region
 }
 
-
+provider "kubernetes" {
+  config_path = var.kubeconfig
+}
 
 
 
@@ -63,20 +65,6 @@ module "aws_eks" {
   pvt_subnet_id_2         = var.pvt_subnet_id_2
 }
 
-module "app-k8s" {
-  source = "../modules/app-k8s"
-}
-
-data "aws_eks_cluster" "cluster" {
-  name = module.eks.cluster_id
-}
-
-data "aws_eks_cluster_auth" "cluster" {
-  name = module.eks.cluster_id
-}
-
-provider "kubernetes" {
-  host                   = data.aws_eks_cluster.cluster.endpoint
-  cluster_ca_certificate = base64decode(data.aws_eks_cluster.cluster.certificate_authority.0.data)
-  token                  = data.aws_eks_cluster_auth.cluster.token
-}
+# module "app-k8s" {
+#   source = "../modules/app-k8s"
+# }
