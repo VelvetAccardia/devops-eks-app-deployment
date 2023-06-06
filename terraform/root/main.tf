@@ -9,11 +9,19 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 4.0 "
     }
+
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+    }
   }
 }
 
 provider "aws" {
   region = var.aws_region
+}
+
+provider "kubernetes" {
+  config_path = var.kubeconfig
 }
 
 
@@ -31,6 +39,7 @@ module "aws_vpc" {
   aws_region                     = var.aws_region
   domain                         = var.domain
   cname                          = var.cname
+  cluster                        = var.cluster
 }
 
 module "aws_rds" {
@@ -54,4 +63,8 @@ module "aws_eks" {
   pvt_subnet_id_1         = var.pvt_subnet_id_1
   pub_subnet_id_2         = var.pub_subnet_id_2
   pvt_subnet_id_2         = var.pvt_subnet_id_2
+}
+
+module "app-k8s" {
+  source = "../modules/app-k8s"
 }

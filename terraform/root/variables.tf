@@ -1,6 +1,16 @@
+variable "kubeconfig" {
+  type    = string
+  default = "~/.kube/eks-kubeconfig.yaml"
+}
+
 variable "aws_region" {
   type = string
 }
+
+variable "cluster" {
+  type = string
+}
+
 
 variable "cidr_block" {
   type    = string

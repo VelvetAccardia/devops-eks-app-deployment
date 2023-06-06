@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-helloworld
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: spring-helloworld
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: spring-helloworld
+    spec:
+      containers:
+      - name: hello-world
+        image: velvetaccardia/spring-helloworld
+        imagePullPolicy: Always
+        ports:
+          - name: tcp
+            containerPort: 8080

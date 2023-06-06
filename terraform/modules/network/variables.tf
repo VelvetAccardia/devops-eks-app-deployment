@@ -2,6 +2,10 @@ variable "aws_region" {
   type = string
 }
 
+variable "cluster" {
+  type = string
+}
+
 variable "aws_availability_zone_1" {
   type = string
 }

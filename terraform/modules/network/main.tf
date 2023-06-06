@@ -12,8 +12,8 @@ resource "aws_subnet" "sub_pub_1_us_west_1" {
   availability_zone = var.aws_availability_zone_1
 
   tags = {
-    Name                        = "sub_pub_1_us_west_1"
-    "kubernetes.io/cluster/eks" = "shared"
+    Name                                       = "sub_pub_1_us_west_1"
+    "kubernetes.io/cluster/eks_devops_cluster" = "shared"
   }
 }
 
@@ -23,8 +23,8 @@ resource "aws_subnet" "sub_pub_2_us_west_1" {
   availability_zone = var.aws_availability_zone_2
 
   tags = {
-    Name                        = "sub_pub_2_us_west_1"
-    "kubernetes.io/cluster/eks" = "shared"
+    Name                                       = "sub_pub_2_us_west_1"
+    "kubernetes.io/cluster/eks_devops_cluster" = "shared"
   }
 }
 
@@ -34,8 +34,8 @@ resource "aws_subnet" "sub_pvt_1_us_west_1" {
   availability_zone = var.aws_availability_zone_1
 
   tags = {
-    Name                        = "sub_pvt_1_us_west_1"
-    "kubernetes.io/cluster/eks" = "shared"
+    Name                                       = "sub_pvt_1_us_west_1"
+    "kubernetes.io/cluster/eks_devops_cluster" = "shared"
   }
 }
 
@@ -45,8 +45,8 @@ resource "aws_subnet" "sub_pvt_2_us_west_1" {
   availability_zone = var.aws_availability_zone_2
 
   tags = {
-    Name                        = "sub_pvt_2_us_west_1"
-    "kubernetes.io/cluster/eks" = "shared"
+    Name                                       = "sub_pvt_2_us_west_1"
+    "kubernetes.io/cluster/eks_devops_cluster" = "shared"
   }
 }
 
